@@ -1,0 +1,28 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.7</VERSION>
+ <DEVICE>"ATmega32A"</DEVICE>
+ <WORKING_DIR>D:\Workset\Embeddedawy\Led_ON_OFF\Led_ON_OFF\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>D:\Workset\Embeddedawy\Led_ON_OFF\Led_ON_OFF\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\m32adef.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>D:\Workset\Embeddedawy\Led_ON_OFF\Led_ON_OFF\Debug\Led_ON_OFF.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>Led_ON_OFF.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>Led_ON_OFF.map</FILE>
+  <FILE>Led_ON_OFF.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <init><FILE>D:\Workset\Embeddedawy\Led_ON_OFF\Led_ON_OFF\main.asm</FILE><LINE>10</LINE></init>
+  <start><FILE>D:\Workset\Embeddedawy\Led_ON_OFF\Led_ON_OFF\main.asm</FILE><LINE>13</LINE></start>
+ </LABELS>
+</ASSEMBLER_INFO>
