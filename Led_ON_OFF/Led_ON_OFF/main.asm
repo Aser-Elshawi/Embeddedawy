@@ -8,36 +8,24 @@
 
 ; Replace with your application code
 init:
-	 SBI $1A,0 ; DDRA <- 0b0000-0001  Set as output for PORTA0
+; INITIALIZATION SP
+	LDI R16,$08
+	OUT $3E,R16
+	LDI R16,$5F
+	OUT $3D,R16
 start:
-	SBI $1B,0 ; PORTA <- 0b0000-0001  Set PIN0 in PORTA as 5V
-
-;Creating a loop1 
-LDI R16, 255 ; initialize the register
-loop11:
-;Creating a loop2 
-LDI R17, 255 ; initialize the register
-loop22:
-	DEC R17   ; decrement R16 = R16 - 1 
-	BRNE loop22 ; branch if not equal zero to loop (conditional branching)
-; End of loop2
-	DEC R16   ; decrement R16 = R16 - 1 
-	BRNE loop11 ; branch if not equal zero to loop (conditional branching)
-; End of loop1
-
-	CBI $1B,0 ;PORTA <- 0b0000-0000  clear PIN0 in PORTA as 0V
-
-;Creating a loop1 
-LDI R16, 255 ; initialize the register
-loop1:
-;Creating a loop2 
-LDI R17, 255 ; initialize the register
+	LDI R17,4
+	LDI R16,$55
+loop:
+	INC R16
+	PUSH R16
+	DEC R17
+	BRNE loop
+	LDI R17,4
 loop2:
-	DEC R17   ; decrement R16 = R16 - 1 
-	BRNE loop2 ; branch if not equal zero to loop (conditional branching)
-; End of loop2
-	DEC R16   ; decrement R16 = R16 - 1 
-	BRNE loop1 ; branch if not equal zero to loop (conditional branching)
-; End of loop1
+	POP R0
+	DEC R17
+	BRNE loop2
+
     rjmp start  ;this is my comment
 
