@@ -9,36 +9,29 @@
 ; Replace with your application code
 init:
 	 ; INITIALIZATION SP
-	LDI R16,$08
+	LDI R16,$04
 	OUT $3E,R16
-	LDI R16,$2A
+	LDI R16,$5F
 	OUT $3D,R16
-	; set portA0 direction to output
-	 SBI $1A,0 ; DDRA <- 0b0000-0001  Set as output for PORTA0
-start:
-	SBI $1B,0 ; PORTA <- 0b0000-0001  Set PIN0 in PORTA as 5V
-
-	CALL DELAY
-	CBI $1B,0 ;PORTA <- 0b0000-0000  clear PIN0 in PORTA as 0V
-	CALL DELAY
-    rjmp start  ;this is my comment
-
-; subroutine
-DELAY:
-	LDI R18, 8
-loop0:
 	
-	LDI R16, 255 ; initialize the register
-loop1:
-;Creating a loop2 
-	LDI R17, 255 ; initialize the register
-loop2:
-	DEC R17   ; decrement R16 = R16 - 1 
-	BRNE loop2 ; branch if not equal zero to loop (conditional branching)
-; End of loop2
-	DEC R16   ; decrement R16 = R16 - 1 
-	BRNE loop1 ; branch if not equal zero to loop (conditional branching)
-	DEC R18
-	BRNE loop0;
-; End of loop1
-	RET
+main:
+; Load the SP data(address) into the Y register
+	LDI   R29, 0x04
+	LDI   R28, 0x5F
+;  Read Rn Value
+	LDI	  R16, 0x55
+;  Write the Value in the SP pointing address
+	ST	  Y,R16
+; SP -> SP -1 (Increment Stack) Decrement Stack Pointer
+	DEC   R28
+; Load the X register with the absolute address of the SPL  (X -> SPL)
+;	LDI   R27, 0x00
+;	LDI   R26, 0x5D
+; Load R18 -> (X)
+;	ST    X, R28
+	OUT   $3D,R28
+	LDI   R16,33
+	PUSH  R16
+	PUSH  R16
+
+
