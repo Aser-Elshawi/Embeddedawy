@@ -37,6 +37,8 @@ init:
 	OUT MCUCR, R16
 	; set PD2 as pull up
 	SBI   PORTD,2
+	; set PD3 as pull up
+	SBI   PORTD,3
 	; enable int0 interrupt and enable int1 interrupt
 	LDI   R16, (1<<int0) | (1<<int1)
 	OUT	  GICR, R16
