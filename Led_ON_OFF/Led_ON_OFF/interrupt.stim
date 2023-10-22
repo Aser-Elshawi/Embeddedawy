@@ -1,0 +1,13 @@
+/*
+ * interrupt.stim
+ *
+ *  Created: 10/1/2023 12:59:53 PM
+ *   Author: asere
+ */ 
+ // Set PIN2 (INT0) high and low repeatedly
+$repeat 2000000
+    PIND |= 0x04
+    #20
+    PIND = 0x0
+    #20
+$endrep

@@ -1,10 +1,3 @@
-;
-; Led_ON_OFF.asm
-;
-; Created: 8/20/2023 1:13:10 PM
-; Author : asere
-;
-
 .INCLUDE <m32adef.inc>
 
 ; Replace with your application code
@@ -13,57 +6,97 @@
 	JMP init
 	; PD2 interrupt
 	JMP int0_isr
-	; PD3 interrupt
-	JMP int1_isr
-
-.DB 0x55, 0x55
-.ORG 0x050
+.ORG 0x030
 ; initialize the stack pointer
 init:
 	LDI R16, LOW(RAMEND)
 	OUT SPL,R16
 	LDI R16, HIGH(RAMEND)
 	OUT SPH,R16
-	; intialize PORTB0 as an output
-	SBI DDRB,  0
-	; intialize PORTB1 as an output
-	SBI DDRB,  1
+	; intialize PORTA as an input
+	LDI R16, $00
+	OUT DDRA,R16
+	; intialize PORTA as input PULL UP
+	LDI R16, $FF
+	OUT PORTA,R16
+	; intialize PORTC0 as an output
+	SBI DDRC,0
+    
 	; configure the int0 pin PD2 as input
 	CBI	  DDRD,2
-	; configure the int0 pin PD2 as input
-	CBI	  DDRD,3
 	; configure int1 on falling edge, configure int0 on falling edge
 	LDI R16, (1<<ISC11) | (1<<ISC01)
 	OUT MCUCR, R16
 	; set PD2 as pull up
 	SBI   PORTD,2
-	; set PD3 as pull up
-	SBI   PORTD,3
 	; enable int0 interrupt and enable int1 interrupt
-	LDI   R16, (1<<int0) | (1<<int1)
+	LDI   R16, (1<<int0)
 	OUT	  GICR, R16
 	; enable global interrupt mask
 	LDI   R16, (1<<SREG_I)
 	OUT	  SREG,R16
 
+
 main:
-	;add the Blinking LED application
-	JMP	  main
+	
 
-; interrupt service routine
+	RJMP	main
+
+
+DELAY:
+	LDI  R16,31 ; 1 cycle -> 99
+LOOP: ; 6 in last loop
+	DEC  R16  ; 1 cycle -> 98
+	brne LOOP ; 2 cycle -> 96
+	nop
+ret ; 4
+
 int0_isr:
-	; execute the interrupt service routine
-	; instructions
-	; instructions
-	SBI PORTB, 0
-	CBI PORTB, 1
-	RETI
+	;SEND 0X41 ON UART
+	;0B 0100 0001
+	;SEND 0 FOR THE START BIT
+	CBI PORTC, 0
+	CALL DELAY ; 4 cycles
 
-int1_isr:
-	; execute the interrupt service routine
-	; instructions
-	; instructions
-	SBI PORTB, 1
-	CBI PORTB, 0
-	RETI
+	;SEND BIT(0) 0
+	CBI PORTC, 0
+	CALL DELAY
 
+	;SEND BIT(1) 1
+	SBI PORTC, 0
+	CALL DELAY
+
+	;SEND BIT(2) 0
+	CBI PORTC, 0
+	CALL DELAY
+	
+	;SEND BIT(3) 0
+	CBI PORTC, 0
+	CALL DELAY
+
+	
+	;SEND BIT(4) 0
+	CBI PORTC, 0
+	CALL DELAY
+
+	
+	;SEND BIT(5) 0
+	CBI PORTC, 0
+	CALL DELAY
+
+	
+	;SEND BIT(6) 0
+	CBI PORTC, 0
+	CALL DELAY
+
+	
+	;SEND BIT(7) 1
+	SBI PORTC, 0
+	CALL DELAY
+
+	
+	;SEND STOP BIT
+	SBI PORTC, 0
+	CALL DELAY
+
+	RETI
