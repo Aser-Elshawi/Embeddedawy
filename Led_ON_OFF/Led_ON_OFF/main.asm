@@ -19,30 +19,39 @@ init:
 	; intialize PORTA as input PULL UP
 	LDI R16, $FF
 	OUT PORTA,R16
-	; intialize PORTC0 as an output
-	SBI DDRC,0
-    
-	; configure the int0 pin PD2 as input
-	CBI	  DDRD,2
-	; configure int1 on falling edge, configure int0 on falling edge
-	LDI R16, (1<<ISC11) | (1<<ISC01)
-	OUT MCUCR, R16
-	; set PD2 as pull up
-	SBI   PORTD,2
-	; enable int0 interrupt and enable int1 interrupt
-	LDI   R16, (1<<int0)
-	OUT	  GICR, R16
-	; enable global interrupt mask
-	LDI   R16, (1<<SREG_I)
-	OUT	  SREG,R16
 
+	LDI	R16, 6
+	LDI R17, 0
+	call USART_Init
 
 main:
+	
+	ldi	R16, 'A'
+	call USART_Transmit
 	
 
 	RJMP	main
 
-
+USART_Init:
+; Set baud rate
+	out UBRRH, r17
+	out UBRRL, r16
+; Enable receiver and transmitter
+	ldi r16, (1<<RXEN)|(1<<TXEN)
+	out UCSRB,r16
+; Set frame format: 8data, 2stop bit
+	ldi r16, (1<<URSEL)|(1<<USBS)|(1<<UCSZ1)|(1<<UCSZ0)
+	out UCSRC,r16
+	ret
+; write the send byte to R16
+USART_Transmit:
+; Wait for empty transmit buffer
+	sbis UCSRA,UDRE
+	rjmp USART_Transmit
+; Put data (r16) into buffer, sends the data
+	out UDR,r16
+ret
+	
 DELAY:
 	LDI  R16,31 ; 1 cycle -> 99
 LOOP: ; 6 in last loop
@@ -52,51 +61,5 @@ LOOP: ; 6 in last loop
 ret ; 4
 
 int0_isr:
-	;SEND 0X41 ON UART
-	;0B 0100 0001
-	;SEND 0 FOR THE START BIT
-	CBI PORTC, 0
-	CALL DELAY ; 4 cycles
-
-	;SEND BIT(0) 0
-	CBI PORTC, 0
-	CALL DELAY
-
-	;SEND BIT(1) 1
-	SBI PORTC, 0
-	CALL DELAY
-
-	;SEND BIT(2) 0
-	CBI PORTC, 0
-	CALL DELAY
-	
-	;SEND BIT(3) 0
-	CBI PORTC, 0
-	CALL DELAY
-
-	
-	;SEND BIT(4) 0
-	CBI PORTC, 0
-	CALL DELAY
-
-	
-	;SEND BIT(5) 0
-	CBI PORTC, 0
-	CALL DELAY
-
-	
-	;SEND BIT(6) 0
-	CBI PORTC, 0
-	CALL DELAY
-
-	
-	;SEND BIT(7) 1
-	SBI PORTC, 0
-	CALL DELAY
-
-	
-	;SEND STOP BIT
-	SBI PORTC, 0
-	CALL DELAY
-
+	nop
 	RETI
