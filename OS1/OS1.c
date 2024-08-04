@@ -67,8 +67,9 @@ void task1_20ms(void){
     if (counter >= FLIP20){
         BIT_FLIP(PORTB,1);
         counter = 0;
-    }
-    counter++;
+    }else{
+		counter++;
+	}
 }
 
 void task2_40ms(void){
@@ -77,6 +78,7 @@ void task2_40ms(void){
     if (counter >= FLIP40){
         BIT_FLIP(PORTB,0);
         counter = 0;
-    }
-    counter++;
+    }else{
+		counter++;
+	}
 }
