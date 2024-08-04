@@ -10,6 +10,7 @@
 #define FLIP40 25  // Make PINB0 flip every 1 second
 
 volatile uint8_t OS_Counter;
+volatile uint8_t old_Counter=255;
 
 void timer1Init(void);
 void task_init(void);
@@ -20,12 +21,17 @@ int main(void){
     timer1Init();
     task_init();
     while(1){
-        if(OS_Counter % 20 == 0){
+		if(old_Counter != OS_Counter)
+		{
+			old_Counter = OS_Counter;
+			if(OS_Counter % 20 == 0){
             task1_20ms();
-        }
-        if(OS_Counter % 40 == 0){
-            task2_40ms();
-        }
+			}
+			if(OS_Counter % 40 == 0){
+				task2_40ms();
+			}
+		}
+        
     }
 }
 
@@ -64,21 +70,21 @@ void task_init(void){
 void task1_20ms(void){
     static int counter;
     
-    if (counter >= FLIP20){
+  //  if (counter >= FLIP20){
         BIT_FLIP(PORTB,1);
-        counter = 0;
-    }else{
-		counter++;
-	}
+  //      counter = 0;
+  //  }else{
+	//	counter++;
+	//}
 }
 
 void task2_40ms(void){
     static int counter;
     
-    if (counter >= FLIP40){
-        BIT_FLIP(PORTB,0);
-        counter = 0;
-    }else{
-		counter++;
-	}
+//   if (counter >= FLIP40){
+      BIT_FLIP(PORTB,0);
+//       counter = 0;
+//   }else{
+//		counter++;
+//	}
 }
