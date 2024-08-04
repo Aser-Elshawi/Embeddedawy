@@ -1,16 +1,43 @@
 MAKE := make
+
+# Makefile for building an AVR project for the ATmega32
+
+# Target MCU
+MCU = atmega32
+
+# Compiler flags
+CFLAGS = -mmcu=$(MCU) -Os
+
+
+# Compiler and linker commands
+CC = avr-gcc
+OBJCOPY = avr-objcopy
+
+# Source and target files
+TARGET = OS1
+SRC = $(TARGET).c
+OBJ = $(TARGET).o
+ELF = $(TARGET).elf
+HEX = $(TARGET).hex
+
+	
+all: $(HEX)
+
+$(HEX): $(ELF)
+	$(OBJCOPY) -O ihex -R .eeprom $(ELF) $(HEX)
+
+# Rule to create elf file from object file
+$(ELF): $(OBJ)
+	$(CC) $(CFLAGS) -o $(ELF) $(OBJ)
+
+# Rule to create object file from C source file
+$(OBJ): $(SRC)
+	$(CC) $(CFLAGS) -c $(SRC) -o $(OBJ)
+	
+	
+# Clean up generated files
 clean:
-	rm -fd OS1.o
-	rm -fd OS1.elf
-	rm -fd OS1.hex
-	
-all: OS1.hex
+	rm -f $(OBJ) $(ELF) $(HEX)
 
-OS1.hex: OS1.elf
-	avr-objcopy -O ihex -R .eeprom OS1.elf OS1.hex
-
-OS1.elf: OS1.o
-	avr-gcc  -o OS1.elf OS1.o
-	
-OS1.o: OS1.c
-	avr-gcc -mmcu=atmega32 -Os -c OS1.c -o OS1.o
+# Phony targets
+.PHONY: all clean
