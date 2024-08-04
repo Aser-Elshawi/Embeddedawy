@@ -64,27 +64,28 @@ void task_init(void){
     DDRB |= (1<< PINB0) | (1<< PINB1);
     
     // Clear PINB0 and PINB1 initially
-    PORTB &= ~((1<<PINB0) | (1<<PINB1));
+    PORTB &= ~(1<<PINB0); 
+	PORTB |=  (1<<PINB1);
 }
 
 void task1_20ms(void){
-    static int counter;
+    static int counter=1;
     
-  //  if (counter >= FLIP20){
+    if (counter >= FLIP20){
         BIT_FLIP(PORTB,1);
-  //      counter = 0;
-  //  }else{
-	//	counter++;
-	//}
+        counter = 1;
+    }else{
+		counter++;
+	}
 }
 
 void task2_40ms(void){
-    static int counter;
+    static int counter=1;
     
-//   if (counter >= FLIP40){
-      BIT_FLIP(PORTB,0);
-//       counter = 0;
-//   }else{
-//		counter++;
-//	}
+   if (counter >= FLIP40){
+    BIT_FLIP(PORTB,0);
+       counter = 1;
+   }else{
+		counter++;
+	}
 }
