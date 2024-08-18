@@ -15,8 +15,11 @@ OBJCOPY = avr-objcopy
 
 # Source and target files
 TARGET = OS1
-SRC = $(TARGET).c
-OBJ = $(TARGET).o
+SRC = $(TARGET).c \
+	  LCD/LCD_1602A.c
+
+# Convert every c file into Object files in OBJ
+OBJ := $(SRC:.c=.o)
 ELF = $(TARGET).elf
 HEX = $(TARGET).hex
 
@@ -31,8 +34,8 @@ $(ELF): $(OBJ)
 	$(CC) $(CFLAGS) -o $(ELF) $(OBJ)
 
 # Rule to create object file from C source file
-$(OBJ): $(SRC)
-	$(CC) $(CFLAGS) -c $(SRC) -o $(OBJ)
+%.o:%.c
+	$(CC) $(CFLAGS) -c $< -o $@
 	
 	
 # Clean up generated files

@@ -1,6 +1,8 @@
-#define F_CPU 12000000UL
+
 #include <avr/io.h>
+#include "common.h"
 #include <avr/interrupt.h>
+#include "LCD/LCD_1602A.h"
 //#include <util/delay.h>
 
 #define BIT_SET(REG,POS)    REG |= (1<<POS) 
